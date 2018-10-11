@@ -1,0 +1,29 @@
+
+body {
+    font-family: 'Raleway', sans-serif;
+    font-size: larger;
+    font-weight: bold;
+    background-color: #FFFFDD;
+    color: black;
+    padding: 2ex;
+}
+
+table {
+    border: 0
+}
+
+td {
+  /* top right bottom left */
+  padding: 1ex 0ex 2ex 3ex;
+}
+
+img {
+    width: 4ex;
+    margin: 0ex;
+}
+
+h1 img {
+  padding-right: 2ex;
+  vertical-align: middle;
+}
+
