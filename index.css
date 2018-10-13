@@ -1,29 +1,37 @@
 
 body {
-    font-family: 'Raleway', sans-serif;
-    font-size: larger;
-    font-weight: bold;
-    background-color: #FFFFDD;
-    color: black;
-    padding: 2ex;
+  font-family: 'Raleway', sans-serif;
+  font-size: larger;
+  font-weight: bold;
+  /* background-color: #FFFFCC; */
+  background-colour: white;
+  color: black;
+  padding: 1ex;
+  margin: 0;
+  background-image: linear-gradient(to right, green, white);
+}
+
+.middle {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 table {
-    border: 0
+  width: 66%;
+  border: 0;
 }
 
 td {
   /* top right bottom left */
-  padding: 1ex 0ex 2ex 3ex;
+  padding: 1ex 3ex 1ex 0ex;
 }
 
 img {
-    width: 4ex;
-    margin: 0ex;
+  width: 6ex;
+  margin: 0ex;
 }
 
 h1 img {
   padding-right: 2ex;
   vertical-align: middle;
 }
-
