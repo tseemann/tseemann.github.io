@@ -1,0 +1,1312 @@
+ <!DOCTYPE html>
+<html class="no-js oldie" lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ORCID</title>
+<meta name="description" content="">
+<meta name="author" content="ORCID">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta property="og:image" content="https://orcid.org/static/release-1.272.2/img/orcid-og-image.png">
+
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-17492803-4', 'auto', {'legacyCookieDomain': 'orcid.org'});  // Replace with your property ID.
+    ga('set', 'anonymizeIp', true); //Anonymize user IP
+	ga('send', 'pageview');
+
+	</script>
+
+
+<script>
+	    (function(h,o,t,j,a,r){
+	        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+	        h._hjSettings={hjid:1220063,hjsv:6};
+	        a=o.getElementsByTagName('head')[0];
+	        r=o.createElement('script');r.async=1;
+	        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+	        a.appendChild(r);
+	    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+	</script>
+
+<script type="text/javascript">
+        window.resourceBasePath = "//orcid.org/static/release-1.272.2"
+        var orcidVar = {};
+            
+      
+      
+        
+        orcidVar.orcidId = '';
+        orcidVar.lastModified = '';
+        orcidVar.orcidIdHash = '';
+        orcidVar.realOrcidId = '';
+        orcidVar.resetParams = '';
+        orcidVar.emailToReactivate = '';        
+        orcidVar.isPasswordConfirmationRequired = false;        
+        orcidVar.providerId = '';           
+        orcidVar.features = JSON.parse("{\"NEW_FOOTER\":true,\"DISABLE_1_2_ON_MEMBER_API\":true,\"ENABLE_RECORD_CREATE_ENDPOINT\":false,\"AFFILIATION_SEARCH\":true,\"LAST_MOD\":true,\"VERBOSE_NOTIFICATIONS\":true,\"ADD_WORKS_WITH_EXTERNAL_ID\":true,\"HTTPS_IDS\":true,\"WIDE_GRID\":true,\"DIALOG_PRIVACY_OPTION\":true,\"ENABLE_HEADER2\":true,\"NEW_BADGES\":true,\"LANG_AR\":true,\"GROUPING_SUGGESTIONS\":true,\"WORKS_FAILURE_DEBUG\":true,\"PUB_API_DEFAULT_TO_V3\":true,\"SELF_SERVICE_ORG_IDS\":true,\"RE_LOGGIN_ALERT\":true,\"ENABLE_PROMOTION_OF_CHOSEN_ORGS\":false,\"AFFILIATION_ORG_ID\":true,\"MEMBER_API_DEFAULT_TO_V3\":true,\"DISABLE_1_2_ON_PUB_API\":true,\"MANUAL_WORK_GROUPING\":true,\"OPENID_SIMPLE_SUBJECT\":true,\"EMAIL_STATUS_DROPDOWN_OPTION\":false,\"SURVEY\":false,\"SEARCH_RESULTS_AFFILIATIONS\":true,\"ENABLE_USER_MENU\":true,\"HOTJAR\":true,\"RESET_PASSWORD_EMAIL\":true,\"EX_ID_RESOLVER\":true,\"GROUP_AFFILIATIONS\":false,\"TWO_FACTOR_AUTHENTICATION\":true,\"REVOKE_TOKEN_ON_CODE_REUSE\":true,\"HIDE_UNVERIFIED_EMAILS\":true,\"RESEARCH_RESOURCE\":true,\"DISABLE_RECAPTCHA\":false,\"DISABLE_1_1\":true,\"USER_OBO\":true}");
+        
+        orcidVar.oauthUserId = "";
+        orcidVar.firstName = "";
+        orcidVar.lastName = ""; 
+        orcidVar.emailId = "";
+        orcidVar.linkRequest = "";
+        
+        orcidVar.loginId = "";
+        
+        
+            orcidVar.developerToolsEnabled = false;
+    </script>
+
+<script>
+	var OrcidGA = function() {
+	    this.buildClientString = function(clientGroupName, clientName) {
+	        return clientGroupName + ' - ' + clientName
+	    };
+
+	    this.gaPush = function(trackArray) {
+	        /*
+	         * window.ga is blocked by Ghostery and disconnect.me 
+	         * window.gaGlobal is blocked by uBlock
+	        */
+	
+	        if(window.ga && window.gaGlobal) {
+	            if(typeof trackArray === 'function') {
+	                ga(trackArray);
+	            } else {
+	                //Anonymize IP for each hit per
+	                //https://developers.google.com/analytics/devguides/collection/analyticsjs/ip-anonymization
+	                if(trackArray[5] == undefined) {
+	                    ga(trackArray[0], trackArray[1], trackArray[2], trackArray[3], trackArray[4], {'anonymizeIp': true});
+	                } else {
+	                    ga(trackArray[0], trackArray[1], trackArray[2], trackArray[3], trackArray[4], trackArray[5], {'anonymizeIp': true});
+	                }                
+	                //console.log("_gap.push for " + trackArray);
+	            }
+	            
+	            setTimeout(function(){
+	                if(!ga.create) {
+	                    // if it's a function and _gap isn't available run (typically only
+	                    // on dev)
+	                    console.log("no _gap.push for " + trackArray);
+	                    if (typeof trackArray === 'function')
+	                        trackArray();
+	                }
+	            }, 200); 
+	        } else {
+	            //console.log("no _gap.push for " + trackArray);
+	            if (typeof trackArray === 'function')
+	                trackArray();                      
+	        }
+	    };
+
+	    // Delays are async functions used to make sure event track que has cleared
+	    // See
+	    // https://developers.google.com/analytics/devguides/collection/gajs/methods/gaJSApi_gaq
+	    //
+	    // Additionally adding in delay:
+	    // http://support.google.com/analytics/answer/1136920?hl=en
+	    this.gaFormSumbitDelay = function($el) {
+	        if (!$el instanceof jQuery) {
+	            $el = $(el);
+	        }
+	        this.gaPush(function() {
+	            console.log("_gap.push executing $el.submit()");
+	            setTimeout(function() {
+	                $el.submit();
+	            }, 100);
+	        });
+	        return false;
+	    };
+	
+	    this.windowLocationHrefDelay = function(url) {
+	        this.gaPush(function() {
+	            console.log("_gap.push has executing window.location.href " + url);
+	            setTimeout(function() {
+	                window.location.href = url;
+	            }, 100);
+	        });
+	        return false;
+	    };
+	};
+
+	var orcidGA = new OrcidGA();	
+</script>
+
+<link rel="stylesheet" href="//orcid.org/static/release-1.272.2/css/spinner.css" />
+<link rel="shortcut icon" href="//orcid.org/static/release-1.272.2/img/favicon.ico" />
+<link rel="apple-touch-icon" href="//orcid.org/static/release-1.272.2/img/apple-touch-icon.png" />
+<style type="text/css">
+        /* 
+        Allow angular.js to be loaded in body, hiding cloaked elements until 
+        templates compile.  The !important is important given that there may be 
+        other selectors that are more specific or come later and might alter display.  
+         */
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+            display: none !important;
+        }
+    </style>
+
+
+<script type="text/ng-template" id="modal-ng2-template">
+    <div [hidden]="!showModal" >
+        <div class="popover-ng2-bck" (click)="closeModal()"></div>
+        <div
+            class="popover-ng2-content"
+            id="colorbox" 
+            role="dialog" 
+            tabindex="-1" 
+            [ngStyle]="{
+            'height': this.elementHeight + 'px',
+            'left': 'calc(50% - ' + this.elementWidth/2 + 'px)',
+            'top': 'calc(50% - ' + this.elementHeight/2 + 'px)',
+            'width': this.elementWidth + 'px'
+            }"
+        >
+            <div id="cboxWrapper" 
+                [ngStyle]="{
+                'height': this.elementHeight + 'px',
+                'width': this.elementWidth + 'px'
+                }"
+            >
+                <div>
+                    <div id="cboxTopLeft" style="float: left;"></div>
+                    <div id="cboxTopCenter" style="float: left;"
+                        [ngStyle]="{
+                        'width': this.elementWidth + 'px'
+                        }"
+                    ></div>
+                    <div id="cboxTopRight" style="float: left;"></div>
+                </div>
+                <div style="clear: left;">
+                    <div id="cboxMiddleLeft" style="float: left;"
+                        [ngStyle]="{
+                        'height': this.elementHeight + 'px'
+                        }"
+                    ></div>
+                    <div id="cboxContent" style="float: left;"
+                        [ngStyle]="{
+                            'height': this.elementHeight + 'px',
+                            'width': this.elementWidth + 'px'
+                        }"
+                    >
+                        <div id="cboxLoadedContent" style=" overflow: auto;"
+                            [ngStyle]="{
+                            'height': this.elementHeight + 'px',
+                            'width': this.elementWidth + 'px'
+                            }"
+                        >
+                            <div class="lightbox-container">
+
+                                <ng-content></ng-content>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</script><script type="text/ng-template" id="ext-id-popover-ng2-template">
+    <span *ngIf="relationship && relationship == 'part-of'" class='italic'>Part of </span><span>{{type | uppercase}}: </span>
+    <span *ngIf="value && !url">{{value}}</span> 
+    <a *ngIf="value && url" href="{{url}}" class="truncate-anchor inline" target="orcid.blank" (mouseenter)="showAffiliationExtIdPopOver(putCode)" (mouseleave)="hideAffiliationExtIdPopOver(putCode)">{{value}}</a> 
+    <div *ngIf="url" class="popover-pos">
+        <div class="popover-help-container">
+            <div class="popover bottom" [ngClass]="{'block' : displayAffiliationExtIdPopOver[putCode] == true}">
+                <div class="arrow"></div>
+                <div class="popover-content">
+                    <a href="{{url}}" target="orcid.blank" class="ng-binding">{{url}}</a>
+                </div>
+            </div>
+        </div>
+    </div>             
+</script>
+
+
+</head> <body class="wide-grid">
+<root-cmp role="presentation">
+<style type="text/css">
+            body, html {
+                height: 100%;
+            }
+            .app-loading {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+            }
+        </style>
+<noscript>
+            <div class="alert alert-banner">
+                 For full functionality of this site it is necessary to enable JavaScript. Here are the <a href="http://www.enable-javascript.com/" target="common.browser-checks.instructionhowtoadd">
+                 instructions for enabling JavaScript in your web browser</a>.<br>
+                 ORCID uses cookies to improve your experience and to help us understand how you use our websites.  <a href="https://orcid.org/privacy-policy#TrackingTechnology" target="common.cookies.learn_more">
+                 Learn more about how we use cookies</a>.
+            </div>
+            <style type="text/css"> 
+            .app-loading {
+                display: none;
+            }
+            </style>
+        </noscript>
+<div class="app-loading">
+<!--[if ! lte IE 9]><!-->
+<i class="spin green x8" style="line-height: 0px;" id="spinner"><img src="//orcid.org/static/release-1.272.2/img/svg/refresh-curve-arrows.svg" class="spinner flip" width="85" height="85" /></i>
+<!--<![endif]-->
+<!--[if lte IE 9]>
+            <img src="//orcid.org/static/release-1.272.2/img/spin-big.gif" class="spinner" width="85" height ="85"/>
+        <![endif]-->
+</div>
+</root-cmp>
+<script type="text/ng-template" id="alert-banner-ng2-template">
+    <div id="test-warn-div" class="alert alert-banner" *ngIf="showTestSiteNotification">
+        <p><strong>Warning! {{baseDomainRemoveProtocol}} is a test website.</strong>&nbsp;<a href="https://orcid.org" target="orcid.org">orcid.org</a>  is the official website. Sandbox only sends email messages to  <a href="https://mailinator.com">mailinator.com</a>  email addresses, see Sandbox FAQ for  <a href="https://support.orcid.org/hc/articles/360006972573" target="common.js.domain.warn.more_information">
+        more information</a></p>
+        <button *ngIf="dismissTestSiteNotificationAllowed" (click)="dismissTestSiteNotification()" id="test-warn-dismiss" class="btn btn-primary">Dismiss</button>
+    </div>
+    <div id="cookie-alert" class="alert alert-banner" *ngIf="showCookieNotification">
+        <p><span *ngIf="!cookiesEnabled">For full functionality of this site, please enable browser cookies.</span> ORCID uses cookies to improve your experience and to help us understand how you use our websites.  <a href="{{getBaseUri()}}/privacy-policy#TrackingTechnology" target="common.cookies.learn_more">
+        Learn more about how we use cookies</a>.</p>
+        <button (click)="dismissCookieNotification()" class="btn btn-primary">Dismiss</button>
+    </div>
+</script> <alert-banner-ng2></alert-banner-ng2>
+
+
+
+<script type="text/ng-template" id="language-ng2-template"> 
+    <form role="presentation" action="#"  >
+        <select
+            *ngIf="languages"
+            name="language-codes" id="language-codes"
+            [(ngModel)]="language" 
+            (ngModelChange)="selectedLanguage()"
+            aria-label="language menu"
+            role="navigation" 
+        >
+            <option 
+                *ngFor="let languageOpt of languages"
+                [value]="languageOpt.value"
+                [selected]="languageOpt.value == language.value"
+            >
+                {{languageOpt.label}}   
+            </option>             
+            
+        </select>
+    </form>                     
+</script><script type="text/ng-template" id="user-menu-template">
+
+      <div class="form-group " role="presentation">
+                    <div class="search-container" role="navigation" aria-label="user menu" (mouseleave)="state = false">
+                         <a *ngIf="!userInfo"  class="top-menu-button" href="{{getBaseUri()}}/signin">  
+                          {{'Sign in'| uppercase  }}/{{'Register'| uppercase }}
+                         </a>
+                        <div *ngIf="userInfo && nameForm"  class="top-menu-button" (click)="state = !state" (keyup.enter)="state = !state" tabindex="0" >  
+                            <img src="{{assetsPath + '/img/svg/profile-icon.svg'}}" role="presentation">
+                            <div class="name" *ngIf="!isMobile"> 
+                                        <ng-container *ngIf="displayFullName()"> {{nameForm?.creditName?.value}}  </ng-container>
+                                        <ng-container *ngIf="displayPublishedName()"> {{nameForm?.givenNames?.value}} {{nameForm?.familyName?.value}}  </ng-container> 
+                            </div> 
+                            <div class="more blue"  [ngClass]="{'less' : state}"  *ngIf="!isMobile"> </div>
+                            
+                        </div>
+
+                         <div class="top-menu" *ngIf="state && userInfo && nameForm">
+                            <a  class="top-menu-header" href="{{getBaseUri()}}/my-orcid">   
+                                <img src="{{assetsPath + '/img/svg/profile-icon.svg'}}" role="presentation">
+                            
+                                <div>
+                                    <div class="name"> 
+                                        <ng-container *ngIf="displayFullName()"> {{nameForm?.creditName?.value}}  </ng-container>
+                                        <ng-container *ngIf="displayPublishedName()"> {{nameForm?.givenNames?.value}} {{nameForm?.familyName?.value}}   </ng-container>
+                                    </div>
+                                    <div class="my-profile"> View my ORCID record </div> 
+                                </div>
+                            </a>
+                            <div class="division"></div>
+                            <div class="top-menu-items">
+                                <a  href="{{getBaseUri()}}/inbox" class="top-menu-item">
+                                    <img src="{{assetsPath + '/img/svg/baseline-inbox-24px.svg'}}">
+                                    
+                                    {{'Inbox' }} <span *ngIf="getUnreadCount > 0">({{getUnreadCount}})</span>
+                                </a>
+                                <a class="top-menu-item" href="{{getBaseUri()}}/account">
+                                    <img src="{{assetsPath + '/img/svg/baseline-settings-20px.svg'}}">
+                                    {{'Account Settings' }}
+                                </a>
+                                <a class="top-menu-item" *ngIf="(userInfo['IN_DELEGATION_MODE'] == 'false' || userInfo['DELEGATED_BY_ADMIN'] == 'true') && userInfo['MEMBER_MENU']=='true'" href="{{getBaseUri()}}/group/developer-tools">
+                                    <img src="{{assetsPath + '/img/svg/baseline-code-24px.svg'}}"> 
+                                    {{'Developer tools' }}
+                                </a>
+                                <a class="top-menu-item" *ngIf="(userInfo['IN_DELEGATION_MODE'] == 'false' || userInfo['DELEGATED_BY_ADMIN'] == 'true') && userInfo['MEMBER_MENU']!='true'" href="{{getBaseUri()}}/developer-tools">
+                                    <img src="{{assetsPath + '/img/svg/baseline-code-24px.svg'}}"> 
+                                    {{'Developer tools' }}
+                                </a>
+                                <a  class="top-menu-item"   *ngIf="userInfo['SELF_SERVICE_MENU']"  href="{{getBaseUri()}}/self-service">
+                                    <img src="{{assetsPath + '/img/svg/baseline-build-24px.svg'}}"> 
+                                    {{'Member Tools'  }}
+                                </a>
+                                <a  class="top-menu-item" *ngIf="userInfo['ADMIN_MENU']" href="{{getBaseUri()}}/manage-members" >
+                                    <img src="{{assetsPath + '/img/svg/baseline-group-24px.svg'}}"> 
+                                    {{'Manage members' }}
+                                </a>
+                                <a  class="top-menu-item" *ngIf="userInfo['ADMIN_MENU']" href="{{getBaseUri()}}/admin-actions">
+                                    <img src="{{assetsPath + '/img/svg/baseline-verified_user-24px.svg'}}"> 
+                                    {{'Admin page'}}
+                                </a>
+                                <a  class="top-menu-item" href="{{getBaseUri()}}/signout">
+                                    <img src="{{assetsPath + '/img/svg/baseline-exit_to_app-24px.svg'}}"> 
+                                    {{'Sign out' }}
+                                </a>
+
+                                
+                                 
+                            </div>
+                            
+                   
+</script><script type="text/ng-template" id="header2-ng2-template">
+
+<div class="header2" >
+    <div  *ngIf="!isOauth && mobileMenu"> 
+
+        <div class="container">
+            <div class="logo-search-bar">
+                <div class="logo" aria-label="ORCID logo" role="banner" aria-label="orcid logo"> 
+                    <a href="{{aboutUri}}"><img *ngIf="assetsPath != null" src="{{assetsPath + '/img/orcid-logo.svg'}}" alt="ORCID logo" /></a>
+                    <div class="slogan">Connecting Research and Researchers</div>
+                     
+                    <div class="menu-control">
+                        <user-menu *ngIf="isMobile && !openMobileMenu"></user-menu>
+                        <language-ng2 *ngIf="openMobileMenu"></language-ng2>
+                        <span (click)="toggleMenu()" role="navigation"  tabindex="0" aria-label="main menu" [hidden]="!openMobileMenu" style="height: 35px" class="close" alt="close menu"> </span>
+                        <img (click)="toggleMenu()" role="navigation"  tabindex="0" aria-label="main menu" [hidden]="openMobileMenu" style="height: 35px" src="{{assetsPath + '/img/glyphicon-menu.svg'}}" alt="open menu"/>
+                    </div>
+                </div>
+                <div class="search" >
+                <div class="dropdown-menus-container">
+                        <user-menu *ngIf="!isMobile"></user-menu>
+                        <language-ng2 *ngIf="!isMobile"></language-ng2>
+                </div>
+                   
+                    <div class="form-group " role="presentation">
+                        <div class="search-container" role="search"> 
+                        <div class="input-group" role="presentation">
+                            <div class="input-group-addon"   (click)="clickDropdown()"  (keyup.enter)="clickDropdown()"  tabindex="0" >
+                                <div role="presentation" class="search-dropdown" [ngClass]="{'hover': searchDropdownOpen}"  (mouseleave)="closeDropdown()">
+                                    <div aria-haspopup="listbox"  [attr.aria-expanded]="searchDropdownOpen" aria-label="'Choose where to search" class="search-dropbtn"  > {{ (headerSearch.searchOption === 'website'? 'website':'registry') | titlecase }} <span [ngClass]="{'dropdown-arrow': !searchDropdownOpen, 'dropdown-arrow-up': searchDropdownOpen}"></span> </div>
+                                    <ul class="dropdown-content" role="listbox" aria-label="where to search">
+                                        <div  tabindex="0" role="option"  (keyup.enter)="clickDropdown('registry')" (click)="clickDropdown('registry')"> {{'registry'| titlecase }} </div>
+                                        <div tabindex="0"  role="option"  (keyup.enter)="clickDropdown('website')" (click)="clickDropdown('website')"> {{'website'| titlecase  }} </div>
+                                    </ul>
+                                </div>  
+                            </div>
+                            <input (keyup.enter)="searchSubmit()" [(ngModel)]="headerSearch.searchInput" aria-label="search"  class="form-control" name="search" type="text" placeholder="Search"/>
+                            <div tabindex="0" role="button" (keyup.enter)="searchSubmit()" (click)="searchSubmit()" aria-label="Search" aria-label="Search" class="input-group-addon" role="presentation">
+                                <span class="glyphicon glyphicon-search" ></span> 
+                            </div>
+                        </div>
+                    </div>        
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-bar"  [hidden]="!openMobileMenu && isMobile"  (mouseleave)="mouseLeave()" role="navigation" aria-label="main menu">
+                <!--  Desktop / Tablet menu -->             
+                <div class="container container-menu"> 
+                <ul class="menu" resize  role="presentation" role="menu">
+                    <!-- FOR RESEARCHERS -->
+                    <li class="first expanded" role="presentation"
+                     [ngClass]="{'hover': mobileMenu.RESEARCHERS, 'open':  this.currentUrl.indexOf('signin') == -1}"  >
+                        <a href="{{aboutUri}}/about/what-is-orcid/mission" 
+                        title="" role="menuitem" 
+                        (mouseenter)="menuHandler('RESEARCHERS', $event)" 
+                        (focus)="menuHandler('RESEARCHERS', $event)" 
+                        (click)="menuHandler('RESEARCHERS', $event)">{{'For Researchers' | uppercase }} 
+                        </a>
+                        
+                    </li>
+
+                    <!-- DRUPAL WEBSITE MENUS -->
+                    <!-- FOR ORGANIZATIONS -->
+                    <li role="presentation" class="expanded" [ngClass]="{'hover': mobileMenu.ORGANIZATIONS}" >
+                        <a href="{{aboutUri}}/organizations" role="menuitem" (mouseenter)="menuHandler('ORGANIZATIONS', $event)" (focus)="menuHandler('ORGANIZATIONS', $event)" (click)="menuHandler('ORGANIZATIONS', $event)">{{'For Organizations  '| uppercase }}<span class="more" [ngClass]="{'less':mobileMenu.ORGANIZATIONS == true}"></span></a>
+                        <ul class="menu lang-fixes"  aria-label="submenu">
+                            <!-- Mobile view Only -->
+                            <li role="presentation" class="first leaf" [hidden]="!isMobile" >
+                                <a role="menuitem" href="{{aboutUri}}/organizations" >{{'For Organizations  '| uppercase }}</a>
+                            </li>
+
+                            <li role="presentation" class="first leaf">
+                                <a role="menuitem" href="{{aboutUri}}/organizations/funders" (click)="handleMobileMenuOption($event); toggleSecondaryMenu('funders')" class="russian-fix" >{{'Funders'| uppercase }}<span class="more" [ngClass]="{'less':secondaryMenuVisible['funders'] == true}"></span></a> <!-- Updated according Drupal website structure -->
+                                <ul class="menu" *ngIf="secondaryMenuVisible['funders'] == true">
+                                    <li class="first leaf">
+                                        <a href="{{aboutUri}}/organizations/funders">{{'Funders '| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/organizations/funders/learnmore">{{'Learn more '| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/organizations/funders/outreachresources">{{'Outreach Resources '| uppercase }}</a>
+                                    </li>
+                                    <li class="last leaf">
+                                        <a href="{{aboutUri}}/about/membership" title="">{{'Membership '| uppercase }}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li role="presentation" class="leaf">
+                                <a role="menuitem" href="{{aboutUri}}/organizations/institutions" (click)="handleMobileMenuOption($event); toggleSecondaryMenu('institutions')">{{'Research Organizations' | uppercase }} <span class="more" [ngClass]="{'less':secondaryMenuVisible['institutions'] == true}"></span></a> <!-- Updated according Drupal website structure -->
+                                    <ul class="menu" *ngIf="secondaryMenuVisible['institutions'] == true">
+                                        <li class="first leaf">
+                                            <a href="{{aboutUri}}/organizations/institutions">{{'Research Organizations' | uppercase }}</a>
+                                        </li>
+                                        <li class="leaf">
+                                            <a href="{{aboutUri}}/organizations/institutions/learnmore">{{'Learn more'| uppercase }}</a>
+                                        </li>
+                                        <li class="leaf">
+                                            <a href="{{aboutUri}}/organizations/institutions/outreachresources">{{'Outreach Resources'| uppercase }}</a>
+                                        </li>
+                                            <li class="leaf"><a href="{{aboutUri}}/about/membership" title="">{{'Membership'| uppercase }}</a>
+                                        </li>
+                                        <li class="last leaf">
+                                            <a href="{{aboutUri}}/organizations/institutions/usecases">{{'Use cases'| uppercase }}</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <li role="presentation" class="leaf">
+                                <a role="menuitem" href="{{aboutUri}}/organizations/publishers" (click)="handleMobileMenuOption($event); toggleSecondaryMenu('publishers')">{{'Publishers '| uppercase }}<span class="more" [ngClass]="{'less':secondaryMenuVisible['publishers'] == true}"></span></a> <!-- Updated according Drupal website structure -->
+                                <ul class="menu" *ngIf="secondaryMenuVisible['publishers'] == true">
+                                    <li class="first leaf">
+                                        <a href="{{aboutUri}}/organizations/publishers"> {{'Publishers'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/organizations/publishers/learnmore">{{'Learn more'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/organizations/publishers/outreachresources">{{'Outreach Resources'| uppercase }}</a>
+                                    </li>
+                                    <li class="last leaf">
+                                        <a href="{{aboutUri}}/about/membership" title="">{{'Membership'| uppercase }}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li role="presentation" class="leaf">
+                                <a role="menuitem" href="{{aboutUri}}/organizations/associations"  (click)="handleMobileMenuOption($event); toggleSecondaryMenu('associations')">{{'Associations '| uppercase }}<span class="more" [ngClass]="{'less':secondaryMenuVisible['associations'] == true}"></span></a> <!-- Updated according Drupal website structure -->
+                                <ul class="menu" *ngIf="secondaryMenuVisible['associations'] == true">
+                                    <li class="first leaf">
+                                        <a href="{{aboutUri}}/organizations/associations">{{'Associations'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="/organizations/associations/learnmore">{{'Learn more'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="/organizations/associations/outreachresources">{{'Outreach resources'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="http://orcid.org/about/membership">{{'Membership'| uppercase }}</a>
+                                    </li>
+                                    <li class="last leaf">
+                                        <a href="/organizations/associations/usecases">{{'Use cases'| uppercase }}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li role="presentation" class="last leaf">
+                                <a role="menuitem" href="{{aboutUri}}/organizations/integrators" (click)="handleMobileMenuOption($event); toggleSecondaryMenu('integrators')">{{'Integrators'| uppercase }} <span class="more" [ngClass]="{'less':secondaryMenuVisible['integrators'] == true}"></span></a> <!-- Updated according Drupal website structure -->
+                                <ul class="menu" *ngIf="secondaryMenuVisible['integrators'] == true">
+                                    <li class="first leaf hidden-sm hidden-md hidden-lg">
+                                        <a href="{{aboutUri}}/organizations/integrators">{{'Integrators'| uppercase }}</a>
+                                    </li>
+                                    <li class="first leaf">
+                                        <a href="{{aboutUri}}/organizations/integrators/API">{{'The ORCID API'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/content/register-client-application-0">{{'Register a Client Application'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/organizations/integrators/current">{{'Current Integrations'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/organizations/integrators/integration-chart">{{'Integration Chart'| uppercase }}</a>
+                                    </li>
+                                    <li class="last leaf">
+                                        <a href="{{aboutUri}}/content/beta-tester-request">{{'Beta Testers'| uppercase }}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- ABOUT -->
+                    <li role="presentation" class="expanded" [ngClass]="{'hover': mobileMenu.ABOUT}"  >
+                        <a href="{{aboutUri}}/about" role="menuitem" (mouseenter)="menuHandler('ABOUT', $event)" (focus)="menuHandler('ABOUT', $event)" (click)="menuHandler('ABOUT', $event)">{{'About '| uppercase }} <span class="more" [ngClass]="{'less':mobileMenu.ABOUT == true}"></span></a>
+
+                        <ul class="menu lang-fixes"  aria-label="submenu">
+                            <!-- Mobile view Only -->
+                            <li  role="presentation" [hidden]="!isMobile" ><a role="menuitem" href="{{aboutUri}}/about"
+                                class="first leaf    ">{{'About'| uppercase }}</a></li>
+                            <!-- What is ORCID? -->
+                            <li role="presentation" class="first expanded">
+                                <a role="menuitem" href="{{aboutUri}}/about/what-is-orcid" (click)="handleMobileMenuOption($event); toggleSecondaryMenu('whatIsOrcid')">{{'What is ORCID '| uppercase }} <span class="more" [ngClass]="{'less':secondaryMenuVisible['whatIsOrcid'] == true}"></span></a>
+                                <ul class="menu" *ngIf="secondaryMenuVisible['whatIsOrcid'] == true" >
+                                        <li class="hidden-md hidden-lg hidden-sm visible-xs">
+                                            <a href="{{aboutUri}}/about/what-is-orcid">{{'What is ORCID'| uppercase }}</a>
+                                        </li>
+                                        <li class="first leaf">
+                                            <a href="{{aboutUri}}/about/what-is-orcid/mission-statement" title="">{{'Our Mission'| uppercase }}</a>
+                                        </li>
+                                        <li class="leaf">
+                                            <a href="{{aboutUri}}/about/what-is-orcid/our-principles" title="">{{'Our Principles'| uppercase }}</a>
+                                        </li>
+                                        <li class="leaf">
+                                            <a href="{{aboutUri}}/content/our-governance">{{'Our Governance'| uppercase }}</a>
+                                        </li>
+                                        <li class="last expanded">
+                                            <a href="{{aboutUri}}/about/what-is-orcid/policies" (click)="handleMobileMenuOption($event); toggleTertiaryMenu('policies')">{{'Our Policies'| uppercase }} <span class="more dark" [ngClass]="{'less':tertiaryMenuVisible['policies'] == true}"></span></a>
+                                            <ul class="menu" *ngIf="tertiaryMenuVisible['policies'] == true" >
+                                                <li class="first leaf"><a
+                                                    href="{{aboutUri}}/orcid-dispute-procedures">{{'Dispute
+                                                        Procedures'| uppercase }}</a></li>
+                                                <li class="leaf"><a
+                                                    href="{{aboutUri}}/footer/privacy-policy" title="">{{'Privacy
+                                                        Policy'| uppercase }}</a></li>
+                                                <li class="leaf"><a
+                                                    href="{{aboutUri}}/content/orcid-public-client-terms-service">{{'Public
+                                                        Client Terms of Service'| uppercase }}</a></li>
+                                                <li class="leaf"><a
+                                                    href="{{aboutUri}}/content/orcid-public-data-file-use-policy">{{'Public
+                                                        Data File Use Policy'| uppercase }}</a></li>
+                                                <li class="leaf"><a href="{{aboutUri}}/legal">{{'Terms
+                                                        and Conditions of Use'| uppercase }}</a></li>
+                                                <li class="last leaf"><a
+                                                    href="{{aboutUri}}/trademark-and-id-display-guidelines">{{'Trademark
+                                                        and iD Display Guidelines'| uppercase }}</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                            </li>
+                            <!-- The ORCID Team -->
+                            <li role="presentation" class="leaf"><a role="menuitem" href="{{aboutUri}}/about/team" title="">{{'The ORCID Team  '| uppercase }}</a></li>
+                            <!-- The ORCID Comunity -->
+                            <li role="presentation" class="expanded" >
+                                <a role="menuitem" href="{{aboutUri}}/about/community" (click)="handleMobileMenuOption($event); toggleSecondaryMenu('community')">{{'The ORCID Community '| uppercase }} <span class="more" [ngClass]="{'less':secondaryMenuVisible['community'] == true}"></span></a>
+                                <ul class="menu" *ngIf="secondaryMenuVisible['community'] == true">
+                                    <li class="hidden-md hidden-lg hidden-sm visible-xs">
+                                        <a href="{{aboutUri}}/about/community">{{'The ORCID Community'| uppercase }}</a>
+                                    </li>
+                                    <li class="first leaf">
+                                        <a href="{{aboutUri}}/about/community" title="">{{'Working Groups'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/about/community/sponsors" title="">{{'Sponsors'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/about/community/members" title="">{{'Members'| uppercase }}</a>
+                                    </li>
+                                    <li class="last">
+                                        <a href="{{aboutUri}}/about/community/launch-partners" title="">{{'Launch Partners'| uppercase }}</a></li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/about/community/orcid-technical-community">{{'Open Source'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/content/partners">{{'Partners'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/content/adoption-and-integration-program">{{'Adoption &amp; Integration Program'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/content/orcid-ambassadors" (click)="handleMobileMenuOption($event); toggleTertiaryMenu('ambassadors')">{{'Ambassadors '| uppercase }}<span class="more dark" [ngClass]="{'less':tertiaryMenuVisible['ambassadors'] == true}"></span></a>
+                                        <ul class="menu" *ngIf="tertiaryMenuVisible['ambassadors']">
+                                            <li class="first last leaf">
+                                                <a href="{{aboutUri}}/content/orcid-ambassadors-1/outreachresources">{{'Outreach Resources '| uppercase }}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="last leaf">
+                                        <a href="http://www.cafepress.com/orcid" title="">{{'ORCID Gear '| uppercase }}</a>
+                                    </li>
+                                </ul> 
+                            </li>
+                            <!-- Membership -->
+                            <li role="presentation" class="expanded" >
+                                <a role="menuitem" href="{{aboutUri}}/about/membership" (click)="handleMobileMenuOption($event); toggleSecondaryMenu('membership')"    >{{'Membership '| uppercase }} <span class="more" [ngClass]="{'less':secondaryMenuVisible['membership'] == true}"></span></a>
+                                <ul class="menu" *ngIf="secondaryMenuVisible['membership'] == true">
+                                    <li class="hidden-md hidden-lg hidden-sm visible-xs">
+                                        <a href="{{aboutUri}}/about/membership">{{'Membership'| uppercase }}</a>
+                                    </li>
+                                    <li class="first expanded">
+                                        <a href="{{aboutUri}}/about/membership" title="" (click)="handleMobileMenuOption($event); toggleTertiaryMenu('membership')"  >{{'Membership &amp; Subscription'| uppercase }}<span class="more dark" [ngClass]="{'less': tertiaryMenuVisible['membership'] == true}"></span></a>
+                                        <ul class="menu" *ngIf="tertiaryMenuVisible['membership']">
+                                            <li class="first last leaf">
+                                                <a href="{{aboutUri}}/content/membership-comparison">{{'Membership Comparison'| uppercase }}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/about/membership/standard-member-agreement" title="">{{'Standard Member Agreement'| uppercase }}</a>
+                                    </li>
+                                    <li class="leaf">
+                                        <a href="{{aboutUri}}/document/standard-creator-membership-agreement">{{'Standard Creator Member Agreement'| uppercase }}</a>
+                                    </li>
+                                    <li class="last leaf">
+                                        <a href="{{aboutUri}}/about/community/members" title="">{{'Our Members'| uppercase }}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- News -->
+                            <li role="presentation" class="leaf">
+                                <a role="menuitem" href="{{aboutUri}}/about/news/news" (click)="handleMobileMenuOption($event); toggleSecondaryMenu('news')">{{'News  '| uppercase }}<span class="more" [ngClass]="{'less':secondaryMenuVisible['news'] == true}"></span></a>
+                                <ul class="menu" *ngIf="secondaryMenuVisible['news'] == true">
+                                    <li class="hidden-md hidden-lg hidden-sm visible-xs">
+                                        <a href="{{aboutUri}}/about/news/news">{{'News'| uppercase }}</a>
+                                    </li>
+                                    <li class="first leaf">
+                                        <a href="{{aboutUri}}/category/newsletter/blog" title="">{{'Blog'| uppercase }}</a>
+                                    </li>
+                                    <li class="last leaf">
+                                        <a href="{{aboutUri}}/newsletter/subscriptions" title="">{{'Subscribe!'| uppercase }}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Events -->
+                            <li role="presentation" class="last expanded">
+                                <a role="menuitem" href="{{aboutUri}}/about/events" title="">{{'Events  '| uppercase }}</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- HELP -->
+                    <li role="presentation" class="expanded" [ngClass]="{'hover': mobileMenu.HELP}"  >
+                        <a role="menuitem" href="{{aboutUri}}/help" (mouseenter)="menuHandler('HELP', $event)" (focus)="menuHandler('HELP', $event)" (click)="menuHandler('HELP', $event)">{{'Help   '| uppercase }}<span class="more" [ngClass]="{'less':mobileMenu.HELP == true}"></span></a>
+                        <ul  [hidden]="!isMobile" class="menu lang-fixes"  aria-label="submenu">
+                            <!-- Mobile view Only -->
+                            <li role="presentation" class="first leaf    "  [hidden]="!isMobile">
+                                <a role="menuitem" href="{{aboutUri}}/help">{{'Help  '| uppercase }}</a>
+                            </li>
+                            <li role="presentation" class="first leaf">
+                                <a role="menuitem" href="{{aboutUri}}/faq-page" title="">{{'FAQ  '| uppercase }}</a>
+                            </li>
+                            <li role="presentation" class="leaf">
+                                <a role="menuitem" href="{{aboutUri}}/help/contact-us" title="">{{'Contact us  '| uppercase }}</a>
+                            </li>
+                            <li role="presentation" class="leaf">
+                                <a role="menuitem" href="https://support.orcid.org/hc/en-us/community/topics" title="">{{'Give Feedback  '| uppercase }}</a>
+                            </li>
+                            <li role="presentation" class="last leaf">
+                                <a role="menuitem" href="{{'https://support.orcid.org/hc" title="">{{'Knowledge Base  '| uppercase }}</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- SIGN IN/OUT -->
+
+                </ul>  
+                </div>
+        </div>
+
+        <p class="header2-see-more container" role="Complementary" aria-label="ORCID statistics">{{liveIds}} ORCID iDs and counting. <a href="{{getBaseUri()}}/statistics"
+             title="">See more...</a>
+        </p>
+
+    </div>   
+</div> 
+</script> <header2-ng2></header2-ng2>
+<div class="container" style="min-height: calc(100% - 118px);">
+<div id="main" role="main" class="main header2-main">
+<script type="text/ng-template" id="maintenance-message-ng2-template">
+                    <div *ngIf="maintenanceMessage!='' && visible" class="row">
+                        <div class="maintenance-header">              
+                           <p [innerHtml]="maintenanceMessage"></p>
+                        </div>
+                    </div>    
+                </script>
+<maintenance-ng2></maintenance-ng2>
+<div class="row">
+<script type="text/ng-template" id="request-password-reset-ng2-template">
+            <div id="RequestPasswordResetCtr" class="reset-password">
+        <a name="resetPassword"></a>
+        <a role="button" tabindex="0"  (keydown.Enter)="toggleResetPassword($event)" (keydown.Space)="toggleResetPassword($event)" (click)="toggleResetPassword($event)" id="reset-password-toggle-text" [innerHTML]="resetPasswordToggleText"></a>
+        <div *ngIf="showResetPassword">
+            <p>
+                 <small role="alert">
+                 Enter an email address associated with your ORCID iD, and we'll send a secure link to that address so you can reset your password. The link is valid for four hours from the time you request it.<br />
+                 If you can no longer access any emails associated with your iD, please contact
+                 <a href="https://orcid.org/help/contact-us">https://orcid.org/help/contact-us</a>
+                 </small>
+            </p>
+            <div id="password-reset" name="emailAddressForm">
+                <span role="alert" class="orcid-error" *ngIf="requestResetPassword.errors && requestResetPassword.errors.length > 0 && !showDeactivatedError &&  !showReactivationSent">
+                   <div *ngFor='let error of requestResetPassword.errors' [innerHTML]="error"></div>
+                </span>
+                <div role="alert" class="alert alert-success" *ngIf="requestResetPassword?.successMessage != null && (!resetPasswordEmailFeatureEnabled)">
+                    <strong><span [innerHTML]="requestResetPassword.successMessage"></span>
+                    </strong>
+                </div>
+                <div role="alert"class="alert alert-success" *ngIf="requestResetPassword?.successMessage != null && resetPasswordEmailFeatureEnabled">
+                    <strong>We have sent a message to {{successEmailSentTo}}
+                    from reset@notify.orcid.org. </strong><br>
+                    If you do not receive a message within 5 minutes, please check your spam folder. If you still do not see a message, then
+                    <a href='https://orcid.org/help/contact-us' target="common.contact_us.uri">contact us</a>.
+                </div>
+                <div class="control-group">
+                    <label for="email" class="control-label">Email </label>                       
+                    <div class="controls"> 
+                        <input id="email" name="email" type="text" class="form-control" [(ngModel)]="requestResetPassword.email" />
+                    </div>
+                    <span role="alert" class="orcid-error" *ngIf="showDeactivatedError && !showReactivationSent">
+                        A deactivated ORCID record is associated with this email address; to reactivate your ORCID record please click <a role="button" tabindex="0" (keydown.Enter)="sendReactivation($event, requestResetPassword.email)" (keydown.Space)="sendReactivation($event, requestResetPassword.email)" (click)="sendReactivation($event, requestResetPassword.email)">here</a>.
+                    </span> 
+                    <span role="alert" class="orcid-error" *ngIf="showReactivationSent">
+                        Thank you for reactivating your ORCID record; please complete the process by following the steps in the email we are now sending you. If you don’t receive an email from us, please contact <a href="https://orcid.org/help/contact-us">https://orcid.org/help/contact-us</a>.
+                    </span>
+                    <!--General error-->
+                    <div style="margin-bottom: 15px;" *ngIf="showSendResetLinkError">
+                        <span role="alert" class="orcid-error">Unable to send reset link</span>
+                    </div>  
+                    <button class="btn btn-primary" (click)="postPasswordResetRequest(requestResetPassword)">Send reset link</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script><script type="text/ng-template" id="oauth-authorization-ng2-template">
+    <!-- /data/orcid/git/ORCID-Source/ORCID-Source/orcid-web/src/main/resources/freemarker/confirm-oauth-access.ftl -->
+        <!-- /data/orcid/git/ORCID-Source/ORCID-Source/orcid-web/src/main/resources/freemarker/login.ftl -->
+        <div   
+         class="col-md-5 col-md-offset-3 accessible-urls accessible-errors" 
+        
+        >
+
+            <div *ngIf="!this.isLoggedIn " class="login">         
+                <p class="title" *ngIf="!showRegisterForm" >Sign into ORCID or <a role="button" tabindex="0" id="switch-to-register-form" (keydown.Enter)="switchForm($event)" (keydown.Space)="switchForm($event)" (click)="switchForm($event)">Register now</a></p>
+                <p class="title" *ngIf="showRegisterForm" >Already have an ORCID iD? <a role="button" tabindex="0" id = "switch-to-login-form" (keydown.Enter)="switchForm($event)" (keydown.Space)="switchForm($event)" (click)="switchForm($event)">Sign In</a></p>
+                <div *ngIf="!showRegisterForm">
+                    <div class="personal-login" >
+                        <div *ngIf="shibbolethEnabled" class="btn-group btn-group-justified" role="group">
+                            <a role="button" tabindex="0"  (keydown.Enter)="showPersonalLogin($event)" (keydown.Space)="showPersonalLogin($event)" (click)="showPersonalLogin($event)" class="btn btn-default" [ngClass]="{active: personalLogin == true}" role="button"><span class="glyphicon glyphicon-user"></span> Personal account</a>
+                            <a role="button" tabindex="0" (keydown.Enter)="showInstitutionLogin($event)" (keydown.Space)="showInstitutionLogin($event)" (click)="showInstitutionLogin($event)" class="btn btn-default" [ngClass]="{active: personalLogin == false}" role="button"><span class="glyphicons bank"></span> Institutional account</a>
+                        </div>
+                        <div *ngIf="personalLogin == true">
+                            <div class="login-box">
+                                <!-- ORCID ACCOUNT LOGIN -->
+                                <div class="personal-account-login">
+                                    <p class="title">Sign in with your ORCID account</p>
+                                    <form class="form-sign-in" id="loginForm" action="{{getBaseUri()}}/signin/auth" method="post">
+<input *ngIf="oauthRequest" type="hidden" name="oauthRequest" value="true"/>
+<input *ngIf="!oauthRequest" type="hidden" name="oauthRequest" value="false"/>
+<div class="form-group">
+    <label for="userId" class="control-label">Email or ORCID iD</label>
+    <input type="text" id="userId" name="userId" [(ngModel)]="authorizationForm.userName.value"  class="form-control" placeholder="Email or ORCID iD" />
+</div>
+<div class="form-group">
+    <label for="password" class="control-label">ORCID password</label>                   
+    <input type="password" id="password" name="password" value="" class="form-control" placeholder="ORCID password" />
+</div>
+<div class="form-group" id="verificationCodeFor2FA">
+    <p class="bold">Two-factor authentication<p>
+    <label for="verificationCode" class="control-label">Two-factor authentication code</label>                      
+    <input id="verificationCode" name="verificationCode" value="" class="form-control" placeholder="Two-factor authentication code" />  
+</div>
+<div id="2FAInstructions" style="display:none">
+    <p>Enter a code from your two-factor authentication app</p>
+    <p>Don't have your device? <a href='#' id='enterRecoveryCode'>Enter a recovery code</a></p>
+    <p>Don?t have your device or recovery code?  <a href='https://orcid.org/help/contact-us'>Contact support</a></p>
+</div>
+<div id="recoveryCodeSignin" class="form-group" style="display:none">
+    <label for="recoveryCode" class="control-label">Recovery code</label>                                       
+    <input id="recoveryCode" name="recoveryCode" value="" class="form-control" placeholder="Recovery code">                                        
+</div>
+<div class="form-group">
+    <button id="form-sign-in-button" class="btn btn-primary" type="submit">Sign into ORCID</button>                                     
+    <span id="ajax-loader" class="no-visible"><i id="ajax-loader-icon" class="glyphicon glyphicon-refresh spin x2 green"></i></span>                                        
+    <div *ngIf="alreadyClaimed" class="alert">The ORCID record has already been claimed. Would you like to sign in?</div>
+      
+    <div *ngIf="invalidClaimUrl" class="alert">Your claim link seems to be wrong, please verify it.</div>
+</div>
+<div id="login-deactivated-error" class="orcid-error" style="display:none">
+    <span *ngIf="showDeactivatedError">
+        <p>
+            <small role="alert" >
+                A deactivated ORCID record is associated with this email address; to reactivate your ORCID record please enter your email address and submit the form to start the reactivate process.<br />
+If you can no longer access any emails associated with your iD, please contact                <a href="https://orcid.org/help/contact-us">https://orcid.org/help/contact-us</a>
+            </small>
+        </p>
+        <div id="reactivate" name="emailAddressForm">            
+            <div class="control-group">
+                <label for="email" class="control-label">Email</label>                       
+                <div class="controls"> 
+                    <input id="email" name="email" type="text" class="form-control" [(ngModel)]="initReactivationRequest.email" />
+                </div>
+                <span  role="alert"  class="orcid-error" *ngIf="initReactivationRequest.error != null">
+                    <div [innerHTML]="initReactivationRequest.error"></div>
+                </span>
+                <span role="button" tabindex="0" class="btn btn-primary" (keydown.Space)="sendReactivationEmail(initReactivationRequest.email, $event)" (keydown.Enter)="sendReactivationEmail(initReactivationRequest.email, $event)"  (click)="sendReactivationEmail(initReactivationRequest.email, $event)">Submit</span>
+            </div>
+        </div>         
+    </span> 
+    <span *ngIf="showReactivationSent">
+        Thank you for reactivating your ORCID record; please complete the process by following the steps in the email we are now sending you. If you don’t receive an email from us, please contact <a href="https://orcid.org/help/contact-us">https://orcid.org/help/contact-us</a>.
+    </span>
+</div>
+<div id="loginErrors"></div>                                    </form>
+                                </div>
+                                <!-- RESET PASSWORD -->
+                                <request-password-reset-ng2 [authorizationForm]="authorizationForm" [showDeactivatedError]="showDeactivatedError" [showReactivationSent]="showReactivationSent" (sendReactivationEmail)="sendReactivationEmail($event)"></request-password-reset-ng2>
+
+                                <!-- SOCIAL LOGIN -->                               
+                                <div class="social-login">
+                                    <div class="title">
+                                        Sign in with a social media account
+                                        <div class="popover-help-container">
+                                            <i class="glyphicon glyphicon-question-sign"></i>
+                                            <div id="social-login-help" class="popover bottom">
+                                                <div class="arrow"></div>
+                                                <div class="popover-content">
+                                                    <p>You may sign into the ORCID Registry using social media accounts you already have, like Facebook or Google. If you don't already have an ORCID iD, you will be prompted to create one. <a href="https://support.orcid.org/hc/articles/360006972693" target="login.signinviayourinstitution.help.2">Learn more...</a></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul class="social-icons">
+                                        <!--GOOGLE-->
+                                        <li>
+                                            <form ngNoForm action="{{getBaseUri()}}/signin/google" method="POST">
+                                                <input type="hidden" name="_csrf" value="dd047fc6-a90d-4d21-b334-4a87bfdf789c"/>
+                                                <button type="submit" class="google-login"> <img role="presentation" src="{{assetsPath}}/img/svg/google-simple.svg"> Sign in with Google</button>
+                                                <input type="hidden" name="scope" value="email" />
+                                            </form>
+                                        </li>
+                                        <!--FACEBOOK-->
+                                        <li>
+                                            <form ngNoForm action="{{getBaseUri()}}/signin/facebook" method="POST">
+                                                <input type="hidden" name="_csrf" value="dd047fc6-a90d-4d21-b334-4a87bfdf789c"/>
+                                                <button type="submit" class="facebook-login"> <img role="presentation" src="{{assetsPath}}/img/svg/facebook-icon-white.svg"> Sign in With Facebook</button>
+                                                <input type="hidden" name="scope" value="email"/>
+                                            </form>
+                                        </li>                                        
+
+                                    </ul>
+                                </div><!--social login-->
+                            </div><!--login box-->
+                        </div><!--*ngIf personal login-->
+                    </div><!--personal login-->               
+                    <!-- SHIBBOLETH -->
+                    <div class="institution-login" *ngIf="personalLogin == false"  >
+                        <div class="login-box">
+                            <div class="institution-login">
+                                <div class="title">
+                                Sign in with an institutional account
+                                    <div class="popover-help-container">
+                                        <i class="glyphicon glyphicon-question-sign"></i>
+                                        <div id="institution-login-help" class="popover bottom">
+                                            <div class="arrow"></div>
+                                            <div class="popover-content">
+                                                <p>You may sign into the ORCID Registry using institutional accounts you already have, like one from your university. If you don't already have an ORCID iD, you will be prompted to create one. <a href="https://support.orcid.org/hc/articles/360006972693" target="login.signinviayourinstitution.help.2">Learn more...</a></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="idpSelectContainer">
+                                    <div id="idpSelectInner">
+                                        <div *ngIf="!scriptsInjected" class="text-center" >
+                                            <i class="glyphicon glyphicon-refresh spin x4 green" id="spinner"></i>
+                                        </div>
+                                        <!-- Where the widget is going to be injected -->
+                                        <div id="idpSelect"></div>
+                                    </div>
+                                </div>
+                            </div><!--institution login-->
+                        </div><!--login box-->
+                    </div><!--institution login-->
+                </div><!--ng show !registion form-->
+                <!-- REGISTRATION FORM-->
+                <div class="personal-account-login" id="RegistrationForm" *ngIf="personalLogin == true && showRegisterForm">
+                    <p>
+                        Per ORCID's 
+                        <a href="http://orcid.org/content/orcid-terms-use" target="terms_and_conditions">
+                        terms and conditions
+                        </a>
+                        , you may only register for an ORCID iD for yourself.
+                    </p>
+<div id="register" class="oauth-registration accesible-urls accesible-erros">
+    <!-- First name -->
+    <div class="form-group clear-fix">
+        <label for="givenNames" id="label-register-form-given-names"class="control-label">First name</label>
+        <div class="bottomBuffer">
+            <input required aria-labelledby="label-register-form-given-names" id="register-form-given-names" name="givenNames" type="text" [(ngModel)]="registrationForm.givenNames.value" (blur)="serverValidate('GivenNames')"/>                             
+            <div class="popover-help-container leftBuffer">
+                <i class="glyphicon glyphicon-question-sign"></i>
+                <div id="name-help" class="popover bottom">
+                    <div class="arrow"></div>
+                    <div class="popover-content">
+                        <p>First name is your given name or the name you most commonly go by.</p>
+                        <p>First name is your given name. Last name is your family name.</p>
+                        <p>You will have a chance to add additional names after you have created your account.</p>
+                        <a href="https://support.orcid.org/hc/articles/360006973853" target="orcid.frontend.register.help.more_info.link.text">More information on names</a>
+                    </div>
+                </div>
+            </div>
+            <span role="alert" class="orcid-error" *ngIf="registrationForm?.givenNames?.errors?.length > 0">
+                <div *ngFor="let error of registrationForm.givenNames.errors" [innerHTML]="error"></div>
+            </span>
+        </div>
+    </div>
+    <!-- Last name -->
+    <div class="form-group clear-fix">
+        <label class="control-label" id="label-register-form-family-name">Last name <i>(Optional)</i></label>
+        <div class="bottomBuffer">
+            <input aria-labelledby="label-register-form-family-name" id="register-form-family-name" name="familyNames" type="text" class=""  [(ngModel)]="registrationForm.familyNames.value" (blur)="serverValidate('FamilyNames')"/>
+            <span role="alert" class="orcid-error" *ngIf="registrationForm?.familyNames?.errors?.length > 0">
+                <div *ngFor="let error of registrationForm.familyNames.errors" [innerHTML]="error"></div>
+            </span>
+        </div>
+    </div>
+    <div>
+        <!-- Primary email -->
+        <div class="form-group clear-fix">
+            <label id="label-email" class="control-label">Primary email</label>
+            <div class="relative">          
+                <input required aria-labelledby="label-email" name="emailprimary234" type="text" class="input-xlarge" [(ngModel)]="registrationForm.email.value" (blur)="serverValidate('Email')"/>
+                <span role="alert" class="orcid-error" *ngIf="registrationForm?.email?.errors?.length > 0 && !showDeactivatedError && !showReactivationSent && !showDuplicateEmailError">
+                    <div *ngFor="let error of registrationForm.email.errors" [innerHTML]="error"></div>
+                </span>
+                <span role="alert" class="orcid-error" *ngIf="showDuplicateEmailError">{{errorEmail}} 
+                    already exists in our system. Would you like to <a (click)="switchForm(errorEmail)">sign in</a> using {{errorEmail}}
+                    ?
+                </span>
+                <span role="alert" class="orcid-error" *ngIf="showDeactivatedError">
+                    A deactivated ORCID record is associated with this email address; to reactivate your ORCID record please click <a (click)="sendReactivationEmail(registrationForm.email.value)">here</a>.
+                </span>
+                <span role="alert" class="orcid-error" *ngIf="showReactivationSent">
+                    Thank you for reactivating your ORCID record; please complete the process by following the steps in the email we are now sending you. If you don’t receive an email from us, please contact <a href="https://orcid.org/help/contact-us">https://orcid.org/help/contact-us</a>.
+                </span>
+            </div>
+        </div>
+        <!-- Additional emails -->
+        <div class="form-group clear-fix" *ngFor="let emailAdditional of registrationForm.emailsAdditional;let i = index;trackBy:trackByIndex">
+            <label id="label-additional-email" class="control-label">Additional email <i>(Optional)</i></label>
+            <div class="relative">
+                <input aria-labelledby="label-additional-email" name="emailadditional234" type="text" class="input-xlarge" [(ngModel)]="registrationForm.emailsAdditional[i].value" [focusMe]="newInput" (blur)="serverValidate('EmailsAdditional')"/>
+                <div *ngIf="i == 0" class="popover-help-container leftBuffer">
+                    <i class="glyphicon glyphicon-question-sign"></i>
+                    <div id="email-additional-help" class="popover bottom">
+                        <div class="arrow"></div>
+                        <div class="popover-content">
+                            <p></p>
+                            <p>Ensure that you never lose access to your ORCID record by registering all of your email addresses on your account.</p>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="i != 0" class="popover-help-container leftBuffer">
+                    <a class="btn-white-no-border" (click)="removeEmailField(i)"><i class="glyphicon glyphicon-remove-sign"></i></a>
+                </div>
+                <span role="alert" class="orcid-error" *ngIf="registrationForm?.emailsAdditional[i]?.errors && registrationForm?.emailsAdditional[i]?.errors?.length > 0 && !showEmailsAdditionalDeactivatedError[i] && !showEmailsAdditionalReactivationSent[i] && !showEmailsAdditionalDuplicateEmailError[i]">
+                    <div *ngFor="let error of registrationForm.emailsAdditional[i].errors;let i = index;trackBy:trackByIndex" [innerHTML]="error"></div>
+                </span>
+                <span role="alert" class="orcid-error" *ngIf="showEmailsAdditionalDuplicateEmailError[i]">{{errorEmailsAdditional[i]}} 
+                    already exists in our system. Would you like to <a (click)="switchForm(errorEmailsAdditional[i])">sign in</a> using {{errorEmailsAdditional[i]}} ?
+                </span>
+                <span role="alert" class="orcid-error" *ngIf="showEmailsAdditionalDeactivatedError[i]">                
+                    A deactivated ORCID record is associated with this email address; to reactivate your ORCID record please click <a (click)="sendEmailsAdditionalReactivationEmail(i)">here</a>.
+                </span>
+                <span role="alert" class="orcid-error" *ngIf="showEmailsAdditionalReactivationSent[i]">
+                    Thank you for reactivating your ORCID record; please complete the process by following the steps in the email we are now sending you. If you don’t receive an email from us, please contact <a href="https://orcid.org/help/contact-us">https://orcid.org/help/contact-us</a>.
+                </span>
+            </div>
+        </div>
+        <button *ngIf="registrationForm?.emailsAdditional?.length < (MAX_EMAIL_COUNT -1)" (click)="addEmailField()" class="left btn-white-no-border"><i class="glyphicon glyphicon-plus-sign"></i> Add another email</button>  
+    </div>
+    <!--Password-->
+    <div class="form-group clear-fix">
+        <label id="label-register-form-password" class="control-label">Password</label>
+        <div class="bottomBuffer">
+            <input aria-labelledby="label-register-form-password" required id="register-form-password" type="password" name="password" class="" [(ngModel)]="registrationForm.password.value" (ngModelChange)="serverValidate('Password')"/>
+    <div class="popover-help-container leftBuffer" style="display: inline; position: relative;">
+        <i class="glyphicon glyphicon-question-sign"></i>
+        <div id="name-help" class="popover bottom">
+            <div class="arrow"></div>
+            <div class="popover-content">
+                <p>Must be 8 or more characters and contain:</p>
+                <ul>
+                    <li>at least 1 numeral: 0 - 9</li>
+                    <li>at least 1 of the following:
+                        <ul>
+                            <li>alpha character, case-sensitive a-Z</li>
+                            <li>any of the following symbols:<br /> ! @ # $ % ^ * &#40; &#41; ~ ` &nbsp; &#123; &#125; &#91; &#93; | \ &amp; _</li>
+                        </ul>
+                    </li>
+                    <li>
+                       optionally the space character,<br/>
+                       i.e ' ' and other punctuation such as . , ;
+                    </li>
+                </ul>                         
+                <p>Additionally, common passwords are not allowed. <a href="https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/10-million-password-list-top-1000.txt" target="password_one_time_reset.commonpasswordslink">See the list of passwords we don't allow  </a></p>
+                <p><strong>Example: sun% moon2</strong></p>
+            </div>                
+        </div>
+    </div>
+            <ng-container *ngIf="registrationForm?.password?.errors?.length > 0">
+                <span role="alert" class="orcid-error" *ngIf="showPasswordPatterError(registrationForm?.password?.errors)">
+                    <div > 
+Passwords must be 8 or more characters and contain at least 1 number and at least 1 alpha character or symbol.                    </div>
+                </span>
+                <ng-container *ngFor='let error of registrationForm.password.errors'>
+                            <ng-container *ngIf="error.indexOf('Pattern.') < 0">
+                                <span role="alert" class="orcid-error">
+                                    <div> 
+                                        {{error}} 
+                                    </div>
+                                </span>
+                            </ng-container>
+                            <ng-container *ngIf="error.indexOf('containsEmail') >= 0">
+                            <span role="alert" class="orcid-error">
+                                    <div> 
+Password must not be the same as your email address                                    </div>
+                                </span>
+                            </ng-container>
+                </ng-container>
+            </ng-container>
+            <span class="pattern-errors" aria-live="polite" >
+                <div class="pattern-container flex" aria-labelledby="eigthCharacters-status eigthCharacters" >
+                    <img aria-hidden="true" tabindex="-1" id="eigthCharacters-status" *ngIf="registrationForm?.password?.errors?.includes('Pattern.registrationForm.password.eigthCharacters')" src="//orcid.org/static/release-1.272.2/img/mat-baseline-check_circle_outline.svg" width="20px" height="20px" alt="unmet" aria-label="Unmet password requirement" >
+                    <img aria-hidden="true" tabindex="-1" id="eigthCharacters-status" *ngIf="!registrationForm?.password?.errors?.includes('Pattern.registrationForm.password.eigthCharacters')" src="//orcid.org/static/release-1.272.2/img/mat-baseline-check_circle.svg" width="20px" height="20px" alt="met" aria-label="Met password requirement" >
+                    <div aria-hidden="true" tabindex="-1" id="eigthCharacters">8 or more characters</div>
+                </div>
+                <div class="pattern-container flex"  aria-labelledby="letterOrSymbol-status letterOrSymbol">
+                    <img aria-hidden="true" tabindex="-1" id="letterOrSymbol-status" *ngIf="registrationForm?.password?.errors?.includes('Pattern.registrationForm.password.letterOrSymbol')" src="//orcid.org/static/release-1.272.2/img/mat-baseline-check_circle_outline.svg" width="20px" height="20px" aria-label="Unmet password requirement" >
+                    <img aria-hidden="true" tabindex="-1" id="letterOrSymbol-status" *ngIf="!registrationForm?.password?.errors?.includes('Pattern.registrationForm.password.letterOrSymbol')" src="//orcid.org/static/release-1.272.2/img/mat-baseline-check_circle.svg" width="20px" height="20px" aria-label="Met password requirement " >
+                    <div aria-hidden="true" tabindex="-1" id="letterOrSymbol" >1 letter or symbol</div>
+                </div>
+                <div class="pattern-container flex"  aria-labelledby="oneNumber-status oneNumber">
+                    <img aria-hidden="true" tabindex="-1" id="oneNumber-status" *ngIf="registrationForm?.password?.errors?.includes('Pattern.registrationForm.password.oneNumber')" src="//orcid.org/static/release-1.272.2/img/mat-baseline-check_circle_outline.svg" width="20px" height="20px" aria-label="Unmet password requirement" >
+                    <img aria-hidden="true" tabindex="-1" id="oneNumber-status"*ngIf="!registrationForm?.password?.errors?.includes('Pattern.registrationForm.password.oneNumber')" src="//orcid.org/static/release-1.272.2/img/mat-baseline-check_circle.svg" width="20px" height="20px" aria-label="Met password requirement" >
+                    <div aria-hidden="true" tabindex="-1" id="oneNumber">1 number</div>
+                </div>
+            </span>
+        </div>
+    </div>
+    <!--Confirm password-->
+    <div class="form-group clear-fix">
+        <label id="label-labelconfirmpassword" class="control-label">Confirm Password</label>
+        <div class="bottomBuffer">
+            <input required aria-labelledby="label-labelconfirmpassword" id="register-form-confirm-password" type="password" name="confirmPassword" class="" [(ngModel)]="registrationForm.passwordConfirm.value" (blur)="serverValidate('PasswordConfirm')"/>
+            <span role="alert" class="orcid-error" *ngIf="registrationForm?.passwordConfirm?.errors?.length > 0">
+                <div *ngFor="let error of registrationForm.passwordConfirm.errors" [innerHTML]="error"></div>
+            </span>
+        </div>
+    </div>
+    <div>
+        <!--Visibility default-->
+        <div class="form-group clear-fix popover-registry">  
+            <h4 id="label-privacySettings">Visibility settings</h4>         
+            <p>Your ORCID iD connects with your ORCID record that can contain links to your research activities, affiliations, awards, other versions of your name, and more. You control this content and who can see it. <a href="https://support.orcid.org/hc/articles/360006897614" target="privacyToggle.help.more_information">More information on visibility settings</a>.</p> 
+            <p><b>By default, who should be able to see information added to your ORCID Record?</b></p>
+            <div class="visibilityDefault" role="radiogroup" aria-labelledby="label-privacySettings">
+                <div class="radio">
+                  <label><input required type="radio" name="defaultVisibility" [(ngModel)]="registrationForm.activitiesVisibilityDefault.visibility" value="PUBLIC" (blur)="serverValidate('ActivitiesVisibilityDefault')"><span class="public"></span><span class="defaultVisLabel"><b>Everyone</b> (87% of users choose this)</span></label>
+                </div>
+                <div class="radio">
+                  <label><input required type="radio" name="defaultVisibility" [(ngModel)]="registrationForm.activitiesVisibilityDefault.visibility" value="LIMITED" (blur)="serverValidate('ActivitiesVisibilityDefault')"><span class="limited"></span><span class="defaultVisLabel"><b>Trusted parties</b> (5% of users choose this)</span></label>
+                </div>
+                <div class="radio">
+                  <label><input required type="radio" name="defaultVisibility" [(ngModel)]="registrationForm.activitiesVisibilityDefault.visibility" value="PRIVATE" (blur)="serverValidate('ActivitiesVisibilityDefault')"><span class="private"></span><span class="defaultVisLabel"><b>Only me</b> (8% of users choose this)</span></label>
+                </div>
+            </div>
+            <span role="alert" class="orcid-error" *ngIf="registrationForm?.activitiesVisibilityDefault?.errors?.length > 0">
+                <div *ngFor="let error of registrationForm.activitiesVisibilityDefault.errors" [innerHTML]="error"></div>
+            </span>
+        </div>
+        <div>
+            <!--Notifications settings -->
+            <div id="notificationSettings" class="form-group clear-fix">  
+                <h4 class="dark-label" id="label-notification_settings">Notification settings</h4>                
+                <p>ORCID sends email notifications about items related to your account, security, and privacy, including requests from ORCID member organizations for permission to update your record, and changes made to your record by those organizations.</p>
+                <p>You can also choose to receive emails from us about new features and tips for making the most of your ORCID record.</p>
+                <div class="control-group">
+                    <input aria-labelledby="label-notification_settings" id="send-orcid-news" type="checkbox" name="sendOrcidNews" [(ngModel)]="registrationForm.sendOrcidNews.value" />
+                    <label for="send-orcid-news">Please send me quarterly emails about new ORCID features and tips</label>
+                    <p class="italic">To receive these emails, you will also need to verify your primary email address.</p>
+                </div>
+                <p>After you've registered, you can change your notification settings at any time in the account settings section of your ORCID record.</p>
+            </div>
+        </div>        
+        <!--Terms and conditions-->
+        <div class="clearfix bottomBuffer">
+            <h4 id="label-labelTermsofUse">Terms of Use</h4>  
+            <p>
+                <input  aria-labelledby="label-labelTermsofUse" required id="register-form-term-box" type="checkbox" name="termsConditions" name="acceptTermsAndConditions" [(ngModel)]="registrationForm.termsOfUse.value" (change)="serverValidate('TermsOfUse')" />
+                I consent to the <a href="{{aboutUri}}/footer/privacy-policy" target="register.labelprivacypolicy">privacy policy</a>&nbsp;and&nbsp;<a href="{{aboutUri}}/content/orcid-terms-use" target="common.termsandconditions2">terms and conditions</a>&nbsp;of use, including agreeing to my data being processed in the US and being publicly accessible where marked Public.
+            </p>
+            <span role="alert" class="orcid-error" *ngIf="registrationForm?.termsOfUse?.errors?.length > 0">
+                <div *ngFor="let error of registrationForm.termsOfUse.errors" [innerHTML]="error"></div>
+            </span>
+        </div>
+        <!--Recaptcha-->
+        <div *ngIf="!disableRecaptchaFeatureEnabled">  
+            <div *ngIf="showRecaptcha" class="bottomBuffer relative recaptcha"  id="recaptcha">
+                <re-captcha (captchaResponse)="handleCaptchaResponse($event)" site_key="{{site_key}}" theme="light" language={{currentLanguage}}></re-captcha>
+                <span role="alert" class="orcid-error" *ngIf="registrationForm?.grecaptcha?.errors?.length > 0">
+                    <div *ngFor="let error of registrationForm.grecaptcha.errors;trackBy:$index" [innerHTML]="error"></div>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!--oauth2ScreensPost errors-->
+    <div style="margin-bottom: 15px;" *ngIf="showGeneralRegistrationError">
+        <span role="alert" class="orcid-error" [innerHtml]="generalRegistrationError"></span>
+    </div>
+    <div style="margin-bottom: 15px;" *ngIf="showFormHasError()">
+        <span role="alert" class="orcid-error" >Please fix above errors</span>
+    </div>
+    <!-- Buttons  -->
+    <div class="bottomBuffer col-xs-12 col-sm-3">
+            <button *ngIf="isLinkRequest" id="register-authorize-button" class="btn btn-primary" name="authorize" value="Authorize" (click)="oauth2ScreensRegister(linkType)">Register</button>
+            <button *ngIf="!isLinkRequest" id="register-authorize-button" class="btn btn-primary" name="authorize" value="Authorize" (click)="oauth2ScreensRegister(null)">Register</button>
+    </div>   
+</div>                  </div><!--personal-account-login-->
+                <!-- END -->
+            </div><!--login-->
+
+            <div *ngIf="this.isLoggedIn  " class="relogin-container">
+                <div>You are signed in as <b>{{realLoggedInUserName}} </b> <a target="_blank" href="{{getBaseUri()}}/">{{getBaseUri()}}/</a>
+                    <ng-container *ngIf=" '' !== ''"> managing the record of <b>{{effectiveLoggedInUserName}} </b> <a target="_blank" href="{{getBaseUri()}}/">{{getBaseUri()}}/</a> </ng-container>
+                </div>
+                <div class="menu-area"> 
+                <a href="{{getBaseUri()}}/my-orcid"><div class="btn btn-primary">Continue to My ORCID record</div></a>
+                <a href="{{getBaseUri()}}/signout"><div class="btn btn-white-no-border">Not You?</div></a>
+                </div>
+            </div>
+        </div><!--col-md-offset-3-->
+</script>
+<oauth-authorization-ng2></oauth-authorization-ng2>
+
+<script type="text/ng-template" id="register-duplicates-ng2-template">
+    <div *ngIf="!showRegisterProcessing"  class="lightbox-container" id="duplicates-records">
+        <div class="row margin-top-box">      
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h4>
+                    Please check whether any of the ORCID iD(s) listed below belong to you. You may have already created an ORCID iD using a different email address, or the iD may belong to another researcher with the same name as you. Click the iD(s) below for more information.                </h4>
+            </div>            
+        </div>        
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table">
+                    <thead>
+                        <tr>                      
+                            <th>ORCID iD</th>
+                            <th>Email</th>
+                            <th>First Name(s)</th>
+                            <th>Last Name</th>
+                            <th>Affiliations</th>              
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let dup of duplicates">
+                            <td><a href="https://orcid.org/{{dup.orcid}}" target="_blank">https://orcid.org/{{dup.orcid}}</a></td>
+                            <td>{{dup.email}}</td>
+                            <td>{{dup.givenNames}}</td>
+                            <td>{{dup.familyNames}}</td>
+                            <td>{{dup['affiliations'].join(", ")}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>          
+        <div class="row margin-top-box">
+            <div class="col-md-12 col-sm-12 col-xs-12 left">
+                <span>Not sure whether you already have an ORCID iD? <a href="https://orcid.org/help/contact-us" target="public-layout.contact_us">Contact us</a></span>
+            </div>
+        </div>
+        <div class="row margin-top-box">
+            <div class="col-md-12 col-sm-12 col-xs-12 right">
+                <ul class="inline-list margin-separator pull-right">
+                    <li>
+                        <a class="cancel-option" href="{{getBaseUri()}}/signin" target="_self">Yes, I have an iD - sign in now</a>
+                    </li>
+                    <li>
+                        <button class="btn btn-primary" (click)="oauth2ScreensPostRegisterConfirm()">
+None of these are me - continue to registration                        </button>                            
+                    </li>
+                </ul>
+            </div>
+        </div>        
+    </div>
+    <div *ngIf="showRegisterProcessing"  class="lightbox-container" id="duplicates-records">
+        <div style="font-size: 50px; line-height: 300px; text-align:center">
+            Processing&nbsp;
+            <i id="ajax-loader" class="glyphicon glyphicon-refresh spin green"></i>
+        </div>
+    </div>
+</script> <modalngcomponent elementHeight="400" elementId="modalRegisterDuplicates" elementWidth="780">
+<register-duplicates-ng2></register-duplicates-ng2>
+</modalngcomponent>
+<div class="col-md-3"></div>
+</div>
+
+</div>
+</div>
+
+
+<script type="text/ng-template" id="footer-ng2-template">
+                    <footer class="footer-main" aria-label="footer">
+                        <div class="container" role="presentation">
+            	            <span id="noop" role="presentation"><!-- For automated tests --> </span>
+                            <div class="row footer-row-container" role="presentation"> 
+
+                                <div class="footer-row-text-container" role="presentation">
+                                    <div>
+                                        <div class="footer-row-icons-container" role="presentation">
+                                            <a href="{{aboutUri}}" alt="ORCID logo">
+                                                <img *ngIf="assetsPath != null" src="{{assetsPath + '/img/orcid-logo.svg'}}" width="110px" alt="ORCID logo">
+                                            </a>
+                                            <nav aria-label="social">
+                                                <ul class="inline-list" role="presentation">
+                                                    <li role="presentation"><a class="social-button" href="https://twitter.com/orcid_org" target="social-twitter" rel="noreferrer"><span class="social social-twitter" aria-label="twitter"></span></a></li>
+                                                    <li role="presentation"><a class="social-button" href="http://orcid.org/blog/feed" target="social-rss" rel="noreferrer"><span class="social social-rss" aria-label="rss"></span></a></li>
+                                                    <li role="presentation"><a class="social-button" href="https://github.com/ORCID" target="social-github" rel="noreferrer"><span class="social social-github" aria-label="github"></span></a></li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+
+                                    <p role="presentation">
+                                        <a rel="license noreferrer" target="footer.copyright_cc0" href="http://creativecommons.org/publicdomain/zero/1.0/" ><img *ngIf="assetsPath != null" src="{{assetsPath + '/img/cc0_80x15.png'}}" style="border-style: none; margin-right: 4px;" alt="CC0" /></a> Except where otherwise specified, the content of this website is published under a <a rel="license noreferrer" target="footer.copyright_cc0" class="footer-url" href="http://creativecommons.org/publicdomain/zero/1.0/">CC0 license</a></p>
+                                    <nav>
+                                        <ul class="inline-list">
+                                            <li><a href="{{aboutUri}}/footer/privacy-policy">Privacy Policy</a></li>
+                                            <li><a href="{{aboutUri}}/content/orcid-terms-use">Terms of Use</a></li>
+                                            <li><a href="https://orcid.org/orcid-dispute-procedures">Dispute procedures</a></li>
+                                            <li><a href="{{aboutUri}}/help/contact-us">Contact us</a></li>
+                                            <li><a href="https://orcid.org/trademark-and-id-display-guidelines">Trademark &amp; iD display guidelines</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                <form action="{{getBaseUri()}}" aria-hidden="true">
+                    <input id="imageUrl" type="hidden" value="{{assetsPath}}/images">                
+                </form>
+            </script>
+<footer-ng2></footer-ng2>
+
+<script src="//orcid.org/static/release-1.272.2/javascript/ng1Orcid/angular_orcid_generated.js"></script>
+<script type="text/javascript">
+    var lang = OrcidCookie.getCookie('locale_v3');
+</script>
+<script type="text/javascript">
+    var head = document.getElementsByTagName('head')[0];
+    var urlParams = new URLSearchParams(location.search);
+    <!-- Zendesk Widget script -->
+    <!--Documentation https://support.zendesk.com/hc/en-us/articles/115009522787-->
+    if(window.location.pathname.indexOf("/print") < 0 && window.location.pathname.indexOf("/oauth") < 0 && (urlParams.get('oauth') == null || typeof(urlParams.get('oauth')) === 'undefined')){
+        var supportWidget = document.createElement("script");
+        supportWidget.src = 'https://static.zdassets.com/ekr/snippet.js?key=b8313acd-6439-4894-b431-8c5a2ae9e7cb';
+        supportWidget.type = 'text/javascript';
+        supportWidget.id = 'ze-snippet';
+        head.appendChild(supportWidget);
+    } 
+</script> </body>
+</html>
