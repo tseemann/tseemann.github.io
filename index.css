@@ -8,7 +8,7 @@ body {
   color: black;
   padding: 1ex;
   margin: 0;
-  background-image: linear-gradient(to right, green, white);
+  /* background-image: linear-gradient(to right, green, white); */
 }
 
 .middle {
